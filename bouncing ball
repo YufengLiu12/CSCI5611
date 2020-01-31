@@ -1,0 +1,79 @@
+String Title = "HW1 Check-in: Bouncing Ball";
+float p = 200;
+float x = 250;
+float v = 0;
+float r = 40;
+float floor = 500;
+int i = 0;
+float a = 1;
+
+void setup(){
+ size(500,500,P3D);
+}
+
+void moveX(){
+  if(v > 1){
+    if (i == 0){
+      x += 1;
+    }
+    if (i == 1){
+      x -= 1;
+    }
+    if (x>=500){
+      i=1;
+    }
+    if (x <= 0){
+      i=0;
+    }
+  }else{
+    if(a>=0){
+      if (i == 0){
+        x += a;
+        a -=0.001;
+      }
+      if (i == 1){
+        x -= 1;
+        a -= 0.001;
+      }
+      if (x>=500){
+        i=1;
+      }
+      if (x <= 0){
+        i=0;
+      }
+    }else{
+      x += 0;
+    }
+  }
+  
+}
+
+void physics(float t){
+  float a = 9.8;
+   v = v + a*t;
+  p = p + v*t;
+
+
+  if (p+r > floor){
+    p = floor-r;
+    v *= -0.95;
+  }
+}
+
+void draw(){
+  noStroke();
+  background(0,0,0);
+  fill(255,255,255);
+  lights();
+  smooth();
+  translate(x,p,0);
+  sphere(r);
+  float startFrame = millis();
+  physics(0.15);
+  moveX();
+  float endPhysics = millis();
+  float endFrame = millis();
+  String report = str(endFrame-startFrame)+"ms" +" " + "physics:" + str(endPhysics-startFrame)+"ms" + " " + "FPS: " + str(round(frameRate)) + "\n";
+  surface.setTitle(Title + "-" + report);
+
+}
